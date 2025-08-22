@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
-    private float speed = 70.0f;
+    public MissileSO missileSO;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,11 +13,17 @@ public class Missile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        this.Movement();
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    Destroy(gameObject);
-    //}
+    private void Movement()
+    {
+        transform.Translate(missileSO.speed * Time.deltaTime * Vector3.forward);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Destroy(gameObject);
+        Instantiate(missileSO.explosionVFX, transform);
+    }
 }

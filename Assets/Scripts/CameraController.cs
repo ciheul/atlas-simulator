@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         HandleZoom();
-        HandleRotation();
+        //HandleRotation();
     }
 
     private void HandleZoom()

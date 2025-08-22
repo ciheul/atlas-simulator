@@ -16,6 +16,6 @@ public class AimManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.LookAt(Camera.main.transform.position);
+        //transform.LookAt(Camera.main.transform.position);
     }
 }
