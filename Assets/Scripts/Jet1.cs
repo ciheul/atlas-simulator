@@ -8,9 +8,6 @@ public class Jet1 : MonoBehaviour
     // khususnya ketika terbang melingkari target
     public Transform centerPoint;
 
-    // ubah jika ingin mengendalikan pesawat tempur
-    private bool isJetControlled = false;
-
     private Rigidbody rb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,7 +31,7 @@ public class Jet1 : MonoBehaviour
 
     void UpdateCircularMovement()
     {
-        rb.AddRelativeForce(transform.right * jetSO.acceleration, ForceMode.Force);
+        rb.AddRelativeForce(new Vector3(0f, 0f, jetSO.initialSpeed) * jetSO.acceleration, ForceMode.Force);
         //rb.AddRelativeForce(transform.up * 9.81f, ForceMode.Force);
 
         float pith = jetSO.pitchSpeed * Time.fixedDeltaTime;

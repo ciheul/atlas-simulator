@@ -1,24 +1,51 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Atlas : MonoBehaviour
 {
     public AtlasSO atlasSO;
+    public MissileSpawner missile1;
+    public MissileSpawner missile2;
+    private MissileSpawner activeLauncher;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        this.AimingControl();
+
+        this.FiringControl();
+    }
+
+    private void FiringControl()
+    {
+        // missile 1
+        if (Input.GetButtonDown("Missile1"))
         {
-            Instantiate(atlasSO.missilePrefab, transform.position, transform.rotation);
+            missile1.activate();
+            missile2.deactivate();
+            activeLauncher = missile1;
         }
 
-        this.AimingControl();
+        // missile 1
+        if (Input.GetButtonDown("Missile2"))
+        {
+            missile1.deactivate();
+            missile2.activate();
+            activeLauncher = missile2;
+        }
+
+        // fire missile
+        if (activeLauncher != null && Input.GetButtonDown("Fire"))
+        {
+            activeLauncher.fireMissile();
+            //Instantiate(atlasSO.missilePrefab, transform.position, transform.rotation);
+        }
     }
 
     private void AimingControl()
