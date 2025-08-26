@@ -3,10 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class WelcomeScene : MonoBehaviour
 {
-    public void Play()
+    public void LoadSceneByName(string sceneName)
     {
         // get scene menggunakan index yg ada di file -> build profiles -> scene list
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene(sceneName);
     }
 
     public void Quit()
