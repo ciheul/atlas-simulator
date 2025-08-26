@@ -15,4 +15,5 @@ MonoBehaviour:
   maxSpeed: 50
   initialSpeed: 50
   acceleration: 9.81
-  pitchSpeed: -10
+  pitchSpeed: 15
+  rollSPeed: 45

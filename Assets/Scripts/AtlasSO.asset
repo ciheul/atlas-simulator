@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f7fb47a41f8f74e8467723dff5c544, type: 3}
   m_Name: AtlasSO
   m_EditorClassIdentifier: 
-  rotationSpeed: 0.2
-  missilePrefab: {fileID: 1374682973695951390, guid: 66e48ab65535f994088919e40b09d446, type: 3}
+  rotationSpeed: 0.3
