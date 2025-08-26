@@ -1,9 +1,7 @@
 using System;
-using System.IO;
 using UnityEngine;
-using UnityEngine.UIElements.Experimental;
 
-public class Jet1 : MonoBehaviour
+public abstract class Jet : MonoBehaviour
 {
     public JetSO jetSO;
 
@@ -18,13 +16,13 @@ public class Jet1 : MonoBehaviour
     protected long now;
     protected float initialHeading;
     protected float currentHeading;
+    protected float initialPitchAngle;
+    protected float currentPitchAngle;
     protected bool[] flagList;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected void Start()
     {
-        // memastikan scene tidak freezed
-        Time.timeScale = 1;
         rb = GetComponent<Rigidbody>();
         rb.maxLinearVelocity = jetSO.maxSpeed;
         rb.linearVelocity = new Vector3(-jetSO.initialSpeed, 0f, 0f);
@@ -34,13 +32,15 @@ public class Jet1 : MonoBehaviour
 
         initialHeading = rb.transform.rotation.eulerAngles.y;
         currentHeading = initialHeading;
+        initialPitchAngle = rb.transform.rotation.eulerAngles.x;
+        currentPitchAngle = initialPitchAngle;
 
         flagList = new bool[6];
         ResetFlag();
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
 
     }
@@ -48,6 +48,7 @@ public class Jet1 : MonoBehaviour
     protected void FixedUpdate()
     {
         currentHeading = rb.transform.rotation.eulerAngles.y;
+        currentPitchAngle = rb.transform.rotation.eulerAngles.x;
 
         ForwardMovement();
         now = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
@@ -55,7 +56,8 @@ public class Jet1 : MonoBehaviour
         MovementPath(returnFlag);
 
         float offset = MathHelper.OffsetRotationAngle(initialHeading, currentHeading);
-        print($"initialHeading:{initialHeading}; currentHeading:{currentHeading}; offsetHeading:{offset}");
+        //print($"initialHeading:{initialHeading}; currentHeading:{currentHeading}; offsetHeading:{offset}");
+        //print($"pitch:{rb.transform.rotation.eulerAngles.x}");
     }
 
     protected void ResetFlag()
@@ -66,43 +68,7 @@ public class Jet1 : MonoBehaviour
         }
     }
 
-    protected void MovementPath(bool[] returnFlag)
-    {
-        if (flagList[2] && now - timer >= 10)
-        {
-            float offset = MathHelper.OffsetRotationAngle(initialHeading, 180);
-            returnFlag = TurnLeft(offset, flagList[0], flagList[1], flagList[2]);
-            flagList[0] = returnFlag[0];
-            flagList[1] = returnFlag[1];
-            flagList[2] = returnFlag[2];
-
-            if (!flagList[2])
-            {
-                timer = now;
-            }
-        }
-
-        if (!flagList[2] && now - timer >= 10)
-        {
-            float offset = MathHelper.OffsetRotationAngle(initialHeading, 0);
-            returnFlag = TurnLeft(offset, flagList[3], flagList[4], flagList[5]);
-            flagList[3] = returnFlag[0];
-            flagList[4] = returnFlag[1];
-            flagList[5] = returnFlag[2];
-
-            if (!flagList[5])
-            {
-                timer = now;
-            }
-        }
-
-        if (flagList[2] == false && flagList[5] == false)
-        {
-            timer = now;
-            ResetFlag();
-        }
-
-    }
+    protected abstract void MovementPath(bool[] returnFlag);
 
     protected void ForwardMovement()
     {
@@ -255,9 +221,65 @@ public class Jet1 : MonoBehaviour
 
     protected void PitchMovement(float direction = -1)
     {
-        float pith = jetSO.pitchSpeed * direction;
-        Quaternion rotation = Quaternion.Euler(pith, 0f, 0f);
+        float pitch = jetSO.pitchSpeed * direction;
+        Quaternion rotation = Quaternion.Euler(pitch, 0f, 0f);
         rb.MoveRotation(rb.rotation * rotation);
+    }
+
+    protected bool PullUp(float pitchAngle, bool flag)
+    {
+        if (!flag) return flag;
+
+        bool standardPitch = currentPitchAngle > pitchAngle;
+        bool standardPitchReached = currentPitchAngle <= pitchAngle;
+
+        if (currentPitchAngle < pitchAngle)
+        {
+            standardPitch = currentPitchAngle < pitchAngle;
+            standardPitchReached = currentPitchAngle >= pitchAngle;
+        }
+
+        if (standardPitchReached)
+        {
+            flag = false;
+        }
+
+        if (standardPitch && flag)
+        {
+            PitchMovement(UP);
+        }
+
+        print($"currentPitchAngle:{currentPitchAngle}; pitchAngle:{pitchAngle}");
+        print($"standardPitchReached:{standardPitchReached}");
+        return flag;
+    }
+
+    protected bool PullDown(float pitchAngle, bool flag)
+    {
+        if (!flag) return flag;
+
+        bool standardPitch = currentPitchAngle < pitchAngle;
+        bool standardPitchReached = currentPitchAngle >= pitchAngle;
+
+        if (currentPitchAngle > pitchAngle)
+        {
+            standardPitch = currentPitchAngle > pitchAngle;
+            standardPitchReached = currentPitchAngle <= pitchAngle;
+        }
+
+        if (standardPitchReached)
+        {
+            flag = false;
+        }
+
+        if (standardPitch && flag)
+        {
+            PitchMovement(DOWN);
+        }
+
+        print($"currentPitchAngle:{currentPitchAngle}; pitchAngle:{pitchAngle}");
+        print($"standardPitchReached:{standardPitchReached}");
+        return flag;
     }
 
     protected void OnTriggerEnter(Collider other)
