@@ -13,6 +13,8 @@ public class Jet1 : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // memastikan scene tidak freezed
+        Time.timeScale = 1;
         rb = GetComponent<Rigidbody>();
         rb.maxLinearVelocity = jetSO.maxSpeed;
         rb.linearVelocity = new Vector3(-jetSO.initialSpeed, 0f, 0f); 
