@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class Jet : MonoBehaviour
+public class Jet : MonoBehaviour
 {
     public JetSO jetSO;
 
@@ -19,6 +19,32 @@ public abstract class Jet : MonoBehaviour
     protected float initialPitchAngle;
     protected float currentPitchAngle;
     protected bool[] flagList;
+    delegate void MovementPathDelegate(bool[] returnFlag);
+    MovementPathDelegate MovementPath;
+
+    private void Awake()
+    {
+        // difficulty
+        // 0 = easy
+        // 1 = medium
+        // 2 = hard
+        int difficulty = PlayerPrefs.GetInt("difficulty", 0);
+        switch (difficulty)
+        {
+            case 0:
+                jetSO = Resources.Load<JetSO>("JetEasySO");
+                MovementPath = new MovementPathDelegate(MovementPathEasy);
+                break;
+            case 1:
+                jetSO = Resources.Load<JetSO>("JetMediumSO");
+                MovementPath = new MovementPathDelegate(MovementPathMedium);
+                break;
+            case 2:
+                jetSO = Resources.Load<JetSO>("JetHardSO");
+                MovementPath = new MovementPathDelegate(MovementPathHard);
+                break;
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected void Start()
@@ -68,7 +94,116 @@ public abstract class Jet : MonoBehaviour
         }
     }
 
-    protected abstract void MovementPath(bool[] returnFlag);
+    protected void MovementPathEasy(bool[] returnFlag)
+    {
+        if (flagList[2] && rb.transform.position.z < -1000)
+        {
+            float offset = MathHelper.OffsetRotationAngle(initialHeading, 180);
+            returnFlag = TurnLeft(offset, flagList[0], flagList[1], flagList[2]);
+            flagList[0] = returnFlag[0];
+            flagList[1] = returnFlag[1];
+            flagList[2] = returnFlag[2];
+
+            if (!flagList[2])
+            {
+                timer = now;
+            }
+        }
+
+        if (!flagList[2] && rb.transform.position.z > 1000)
+        {
+            float offset = MathHelper.OffsetRotationAngle(initialHeading, 0);
+            returnFlag = TurnLeft(offset, flagList[3], flagList[4], flagList[5]);
+            flagList[3] = returnFlag[0];
+            flagList[4] = returnFlag[1];
+            flagList[5] = returnFlag[2];
+
+            if (!flagList[5])
+            {
+                timer = now;
+            }
+        }
+
+        if (flagList[2] == false && flagList[5] == false)
+        {
+            timer = now;
+            ResetFlag();
+        }
+    }
+
+    protected void MovementPathMedium(bool[] returnFlag)
+    {
+        if (flagList[2] && rb.transform.position.z < -1000)
+        {
+            float offset = MathHelper.OffsetRotationAngle(initialHeading, 180);
+            returnFlag = TurnLeft(offset, flagList[0], flagList[1], flagList[2]);
+            flagList[0] = returnFlag[0];
+            flagList[1] = returnFlag[1];
+            flagList[2] = returnFlag[2];
+
+            if (!flagList[2])
+            {
+                timer = now;
+            }
+        }
+
+        if (!flagList[2] && rb.transform.position.z > 1000)
+        {
+            float offset = MathHelper.OffsetRotationAngle(initialHeading, 0);
+            returnFlag = TurnLeft(offset, flagList[3], flagList[4], flagList[5]);
+            flagList[3] = returnFlag[0];
+            flagList[4] = returnFlag[1];
+            flagList[5] = returnFlag[2];
+
+            if (!flagList[5])
+            {
+                timer = now;
+            }
+        }
+
+        if (flagList[2] == false && flagList[5] == false)
+        {
+            timer = now;
+            ResetFlag();
+        }
+    }
+
+    protected void MovementPathHard(bool[] returnFlag)
+    {
+        if (flagList[2] && rb.transform.position.z < 200)
+        {
+            float offset = MathHelper.OffsetRotationAngle(initialHeading, 180);
+            returnFlag = TurnLeft(offset, flagList[0], flagList[1], flagList[2]);
+            flagList[0] = returnFlag[0];
+            flagList[1] = returnFlag[1];
+            flagList[2] = returnFlag[2];
+
+            if (!flagList[2])
+            {
+                timer = now;
+            }
+        }
+
+        if (!flagList[2] && rb.transform.position.z > 1000)
+        {
+            float offset = MathHelper.OffsetRotationAngle(initialHeading, 0);
+            returnFlag = TurnLeft(offset, flagList[3], flagList[4], flagList[5]);
+            flagList[3] = returnFlag[0];
+            flagList[4] = returnFlag[1];
+            flagList[5] = returnFlag[2];
+
+            if (!flagList[5])
+            {
+                timer = now;
+            }
+        }
+
+        if (flagList[2] == false && flagList[5] == false)
+        {
+            timer = now;
+            ResetFlag();
+        }
+    }
 
     protected void ForwardMovement()
     {

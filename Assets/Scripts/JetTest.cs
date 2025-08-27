@@ -8,7 +8,7 @@ public class JetTest : Jet
         base.FixedUpdate();
         print($"pitch:{rb.transform.rotation.eulerAngles.x}");
     }
-    protected override void MovementPath(bool[] returnFlag)
+    protected new void MovementPathEasy(bool[] returnFlag)
     {
         if (rb.transform.position.y < 500)
         {
