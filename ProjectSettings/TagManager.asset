@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - jet
+  - Audio
   layers:
   - Default
   - TransparentFX
