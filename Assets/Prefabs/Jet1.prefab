@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 359485738817279527, guid: a5bba4471f2b885428541314bad7877b, type: 3}
       propertyPath: m_Name
-      value: JetEasy
+      value: Jet1
+      objectReference: {fileID: 0}
+    - target: {fileID: 359485738817279527, guid: a5bba4471f2b885428541314bad7877b, type: 3}
+      propertyPath: m_TagString
+      value: jet
       objectReference: {fileID: 0}
     - target: {fileID: 1132363881725136029, guid: a5bba4471f2b885428541314bad7877b, type: 3}
       propertyPath: m_RootOrder
@@ -88,7 +92,7 @@ PrefabInstance:
       addedObject: {fileID: 3078017002620523940}
     - targetCorrespondingSourceObject: {fileID: 359485738817279527, guid: a5bba4471f2b885428541314bad7877b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3622784447323612821}
+      addedObject: {fileID: 3807607273857975605}
   m_SourcePrefab: {fileID: 100100000, guid: a5bba4471f2b885428541314bad7877b, type: 3}
 --- !u!1 &7027150437423852862 stripped
 GameObject:
@@ -143,7 +147,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3622784447323612821
+--- !u!114 &3807607273857975605
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,7 +156,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7027150437423852862}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ae30df38bd9b75499d9dbfafe8ca249, type: 3}
+  m_Script: {fileID: 11500000, guid: e76255aea3e5a274aa4318b3eef5efa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jetSO: {fileID: 11400000, guid: 6b4902564b50063469b78617002cf176, type: 2}
+  jetSO: {fileID: 0}

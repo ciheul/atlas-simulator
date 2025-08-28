@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f7fb47a41f8f74e8467723dff5c544, type: 3}
   m_Name: AtlasSO
   m_EditorClassIdentifier: 
-  rotationSpeed: 0.3
+  rotationSpeed: 100
+  zoomInFOV: 20
+  zoomOutFOV: 60

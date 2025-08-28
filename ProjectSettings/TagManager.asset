@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - jet
   - Audio
+  - spawner
   layers:
   - Default
   - TransparentFX
