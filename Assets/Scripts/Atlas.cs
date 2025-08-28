@@ -1,17 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Atlas : MonoBehaviour
 {
     public AtlasSO atlasSO;
+    public UIData uiData;
     public MissileSpawner missile1;
     public MissileSpawner missile2;
     private MissileSpawner activeLauncher;
+    public bool lockOn;
+    public GameObject lockOnStatus;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        lockOn = false;
     }
 
     // Update is called once per frame
@@ -26,6 +30,16 @@ public class Atlas : MonoBehaviour
         AimingControl();
     }
 
+    public void LockOn()
+    {
+        if (!activeLauncher.argonActive)
+        {
+            return;
+        }
+        lockOn = true;
+        lockOnStatus.GetComponent<TMP_Text>().text = uiData.onText;
+    }
+
     private void FiringControl()
     {
         // missile 1
@@ -36,7 +50,7 @@ public class Atlas : MonoBehaviour
             activeLauncher = missile1;
         }
 
-        // missile 1
+        // missile 2
         if (Input.GetButtonDown("Missile2"))
         {
             missile1.deactivate();
@@ -44,11 +58,26 @@ public class Atlas : MonoBehaviour
             activeLauncher = missile2;
         }
 
-        // fire missile
-        if (activeLauncher != null && Input.GetButtonDown("Fire"))
+        if(activeLauncher != null)
         {
-            activeLauncher.fireMissile();
-            //Instantiate(atlasSO.missilePrefab, transform.position, transform.rotation);
+            // argon
+            if (Input.GetButtonDown("Argon"))
+            {
+                activeLauncher.activateArgon();
+            }
+
+            //lock
+            // argon
+            if (Input.GetButtonDown("Lock"))
+            {
+                LockOn();
+            }
+
+            // fire missile
+            if (activeLauncher.isReadyToFire() && Input.GetButtonDown("Fire"))
+            {
+                activeLauncher.fireMissile();
+            }
         }
     }
 

@@ -143,7 +143,8 @@ public class Missile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Instantiate(missileSO.explosionVFX, transform.position, transform.rotation);
+        GameObject explosion = Instantiate(missileSO.explosionVFX, transform.position, transform.rotation);
+        Destroy(explosion, 1);
         Destroy(gameObject);
     }
 }
