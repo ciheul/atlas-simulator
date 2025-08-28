@@ -55,7 +55,7 @@ public class Jet1 : MonoBehaviour
         MovementPath(returnFlag);
 
         float offset = MathHelper.OffsetRotationAngle(initialHeading, currentHeading);
-        print($"initialHeading:{initialHeading}; currentHeading:{currentHeading}; offsetHeading:{offset}");
+        //print($"initialHeading:{initialHeading}; currentHeading:{currentHeading}; offsetHeading:{offset}");
     }
 
     protected void ResetFlag()
