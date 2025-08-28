@@ -9,6 +9,12 @@ public class PauseMenu : MonoBehaviour
     public UnityEvent GamePaused;
     public UnityEvent GameResumed;
 
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -50,5 +56,15 @@ public class PauseMenu : MonoBehaviour
     public void BackToMenu()
     {
         SceneManager.LoadScene("WelcomeScene");
+    }
+
+    public void ClickButton()
+    {
+        audioManager.playSFX(audioManager.buttonClick);
+    }
+
+    public void ClickInput()
+    {
+        audioManager.playSFX(audioManager.inputClick);
     }
 }
