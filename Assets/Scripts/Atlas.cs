@@ -1,6 +1,5 @@
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 
 public class Atlas : MonoBehaviour
 {
@@ -12,6 +11,12 @@ public class Atlas : MonoBehaviour
     public bool lockOn;
     public GameObject lockOnStatus;
 
+    // zoom settings
+    private int currentZoomLevel = 0;
+    private int minZoomLevel = 0;
+    private int maxZoomLevel = 2;
+    private float fieldOfViewValue = 20;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,23 +26,14 @@ public class Atlas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        HandleZoom();
         FiringControl();
+        print($"currentZoomLevel:{currentZoomLevel}");
     }
 
     private void FixedUpdate()
     {
         AimingControl();
-    }
-
-    public void LockOn()
-    {
-        if (!activeLauncher.argonActive)
-        {
-            return;
-        }
-        lockOn = true;
-        lockOnStatus.GetComponent<TMP_Text>().text = uiData.onText;
     }
 
     private void FiringControl()
@@ -48,6 +44,7 @@ public class Atlas : MonoBehaviour
             missile1.activate();
             missile2.deactivate();
             activeLauncher = missile1;
+            deactivateLockOn();
         }
 
         // missile 2
@@ -56,6 +53,7 @@ public class Atlas : MonoBehaviour
             missile1.deactivate();
             missile2.activate();
             activeLauncher = missile2;
+            deactivateLockOn();
         }
 
         if(activeLauncher != null)
@@ -64,6 +62,7 @@ public class Atlas : MonoBehaviour
             if (Input.GetButtonDown("Argon"))
             {
                 activeLauncher.activateArgon();
+                print($"activeLauncher:{activeLauncher.name}");
             }
 
             //lock
@@ -80,6 +79,23 @@ public class Atlas : MonoBehaviour
             }
         }
     }
+    void LockOn()
+    {
+        if (!activeLauncher.argonActive)
+        {
+            return;
+        }
+        lockOn = true;
+        lockOnStatus.GetComponent<TMP_Text>().text = uiData.onText;
+
+        activeLauncher.StartArgonCountdown();
+    }
+
+    void deactivateLockOn()
+    {
+        lockOn = false;
+        lockOnStatus.GetComponent<TMP_Text>().text = uiData.offText;
+    }
 
     private void AimingControl()
     {
@@ -88,17 +104,24 @@ public class Atlas : MonoBehaviour
 
         float horizontalAim = Input.GetAxis("Horizontal") * atlasSO.rotationSpeed * Time.fixedDeltaTime;
         transform.Rotate(Vector3.up * horizontalAim, Space.World);
+    }
 
-        //zoom
-        float zoom = Input.GetAxis("Zoom");
-        switch (zoom)
+    private void HandleZoom()
+    {
+        // zoom in
+        if (Input.GetButtonDown("ZoomIn") && currentZoomLevel < maxZoomLevel)
         {
-            case 1:
-                Camera.main.fieldOfView = atlasSO.zoomInFOV;
-                break;
-            case -1:
-                Camera.main.fieldOfView = atlasSO.zoomOutFOV;
-                break;
+            print("zoom in");
+            Camera.main.fieldOfView -= fieldOfViewValue;
+            currentZoomLevel += 1;
         }
+        // zoom out
+        else if (Input.GetButtonDown("ZoomOut") && currentZoomLevel > minZoomLevel)
+        {
+            print("zoom out");
+            Camera.main.fieldOfView += fieldOfViewValue;
+            currentZoomLevel -= 1;
+        }
+
     }
 }

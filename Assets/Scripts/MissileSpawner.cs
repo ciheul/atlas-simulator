@@ -13,8 +13,8 @@ public class MissileSpawner : MonoBehaviour
     public bool argonActive;
     bool argonSpent;
     public Atlas atlas;
-    long timer;
-    long now;
+    private long timer;
+    private long now;
     long argonTimeLimit;
     long argonCountdown;
     public GameObject missileLoadedStatus;
@@ -41,7 +41,6 @@ public class MissileSpawner : MonoBehaviour
 
     private void FixedUpdate()
     {
-        print($"argonActive:{argonActive}; lockOn:{atlas.lockOn}; active:{active}; loaded:{loaded}");
         if(argonActive && atlas.lockOn && active && loaded)
         {
             now = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
@@ -97,8 +96,13 @@ public class MissileSpawner : MonoBehaviour
         }
         argonActive = true;
         argonStatus.GetComponent<TMP_Text>().text = uiData.onText;
+    }
+
+    public void StartArgonCountdown()
+    {
         timer = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
         now = timer;
+        print($"StartArgonCountdown:{timer}");
     }
 
     public void fireMissile()
