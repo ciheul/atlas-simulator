@@ -8,4 +8,5 @@ public class MissileSO : ScriptableObject
     public float turnSpeedMultiplier = 3f;
     public float maxTurnSpeed = 2f;
     public GameObject explosionVFX;
+    public GameObject smokeSFX;
 }

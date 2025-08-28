@@ -6,6 +6,7 @@ TagManager:
   tags:
   - jet
   - Audio
+  - spawner
   layers:
   - Default
   - TransparentFX

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c9de67b4184214d91a61fe08e9a19e, type: 3}
   m_Name: MissileSO
   m_EditorClassIdentifier: 
-  speed: 70
+  speed: 300
   seekerFOV: 20
   turnSpeedMultiplier: 3
   maxTurnSpeed: 1.5
   explosionVFX: {fileID: 4868538168526089871, guid: 7bcf29c8fbb433f4cbc27a4ae6ac2b79, type: 3}
+  smokeSFX: {fileID: 9155463838991273943, guid: db97ba35f680c914480ecc075d752dbf, type: 3}

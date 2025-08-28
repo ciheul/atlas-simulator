@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -6,6 +7,8 @@ public class Missile : MonoBehaviour
 {
     public MissileSO missileSO;
     private GameObject jet;
+    long timer;
+    long now;
 
     private void Awake()
     {
@@ -15,24 +18,39 @@ public class Missile : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        timer = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
+        now = timer;
+
         jet = FindClosestJet();
+        Instantiate(missileSO.smokeSFX, transform);
     }
 
     // Update is called once per frame
     void Update()
     {
-    
+ 
     }
 
     void FixedUpdate()
     {
+        now = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
+
         float eulerAngleX = 0f;
         float eulerAngleY = 0f;
 
-        Homing(ref eulerAngleX, ref eulerAngleY);
         if (jet != null)
         {
-            Movement(eulerAngleY, eulerAngleX);
+            if (!jet.IsDestroyed()){
+                Homing(ref eulerAngleX, ref eulerAngleY);
+      
+            }
+        }
+        FormwardMovement(eulerAngleY, eulerAngleX);
+
+        // flight distance limit
+        if ((now - timer) * missileSO.speed >= 5000)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -50,11 +68,16 @@ public class Missile : MonoBehaviour
 
         float closestDistance = Mathf.Min(directionList);
         int index = Array.IndexOf(directionList, closestDistance);
+        if (index == -1)
+        {
+            return null;
+        }
         return jetList[index];
     }
 
     private void Homing(ref float eulerAngleX, ref float eulerAngleY)
     {
+        // homing script
         RaycastHit hit;
         Vector3 targetDirection = jet.transform.position - transform.position;
 
@@ -103,12 +126,8 @@ public class Missile : MonoBehaviour
 
 
         }
-    }
 
-    private void Movement(float eulerAngleY, float eulerAngleX)
-    {
-        transform.Translate(missileSO.speed * Time.deltaTime * Vector3.forward);
-
+        /// turning buat homing
         if (jet.transform.position.z < transform.position.z)
         {
             eulerAngleY = -eulerAngleY;
@@ -116,9 +135,15 @@ public class Missile : MonoBehaviour
         transform.Rotate(new Vector3(eulerAngleY, eulerAngleX));
     }
 
+    private void FormwardMovement(float eulerAngleY, float eulerAngleX)
+    {
+        // forward movement
+        transform.Translate(missileSO.speed * Time.deltaTime * Vector3.forward);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        Instantiate(missileSO.explosionVFX, transform.position, transform.rotation);
         Destroy(gameObject);
-        Instantiate(missileSO.explosionVFX, transform);
     }
 }

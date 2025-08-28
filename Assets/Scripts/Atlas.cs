@@ -17,9 +17,13 @@ public class Atlas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        AimingControl();
 
         FiringControl();
+    }
+
+    private void FixedUpdate()
+    {
+        AimingControl();
     }
 
     private void FiringControl()
@@ -50,10 +54,10 @@ public class Atlas : MonoBehaviour
 
     private void AimingControl()
     {
-        float verticalAim = Input.GetAxis("Vertical") * atlasSO.rotationSpeed;
+        float verticalAim = Input.GetAxis("Vertical") * atlasSO.rotationSpeed * Time.fixedDeltaTime;
         transform.Rotate(Vector3.right * -verticalAim);
 
-        float horizontalAim = Input.GetAxis("Horizontal") * atlasSO.rotationSpeed;
+        float horizontalAim = Input.GetAxis("Horizontal") * atlasSO.rotationSpeed * Time.fixedDeltaTime;
         transform.Rotate(Vector3.up * horizontalAim, Space.World);
 
         //zoom

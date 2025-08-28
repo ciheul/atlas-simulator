@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b020e22f53b3614b80851bf6c526370, type: 3}
-  m_Name: JetTestSO
+  m_Script: {fileID: 11500000, guid: 56a5cf053869b8e4b8309d3197b6847b, type: 3}
+  m_Name: JetSpawnerSO
   m_EditorClassIdentifier: 
-  maxSpeed: 10
-  initialSpeed: 50
-  acceleration: 9.81
-  pitchSpeed: 0.25
-  rollSpeed: 45
+  EasyJetQuantity: 1
+  MediumJetQuantity: 1
+  HardJetQueantity: 2
+  difficultyJetQuantity: 1

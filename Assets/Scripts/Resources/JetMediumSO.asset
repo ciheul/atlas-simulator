@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b020e22f53b3614b80851bf6c526370, type: 3}
   m_Name: JetMediumSO
   m_EditorClassIdentifier: 
-  maxSpeed: 100
+  maxSpeed: 200
   initialSpeed: 100
   acceleration: 9.81
   pitchSpeed: 0.25
