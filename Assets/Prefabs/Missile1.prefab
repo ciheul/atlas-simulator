@@ -156,3 +156,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missileSO: {fileID: 11400000, guid: 07384de0f41ed374ebf180f45d2f1863, type: 2}
+  uiData: {fileID: 11400000, guid: 3ba9081c44f6c034e8ca723645813a1d, type: 2}
+  hitMissText: {fileID: 0}

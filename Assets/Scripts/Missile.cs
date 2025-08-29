@@ -1,12 +1,15 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UIElements;
 
 public class Missile : MonoBehaviour
 {
     public MissileSO missileSO;
+    public UIData uiData;
     private GameObject jet;
+    public GameObject hitMissText;
     long timer;
     long now;
 
@@ -21,7 +24,8 @@ public class Missile : MonoBehaviour
         timer = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
         now = timer;
 
-        jet = FindClosestJet();
+        jet = Resources.Load<AtlasSO>("AtlasSO").lockedOnJet;
+        hitMissText = GameObject.Find("HitIndicator");
         Instantiate(missileSO.smokeSFX, transform);
     }
 
@@ -51,28 +55,8 @@ public class Missile : MonoBehaviour
         if ((now - timer) * missileSO.speed >= 5000)
         {
             Destroy(gameObject);
+            hitMissText.GetComponent<TMP_Text>().text = uiData.jetMiss;
         }
-    }
-
-    private GameObject FindClosestJet()
-    {
-        GameObject[] jetList = GameObject.FindGameObjectsWithTag("jet");
-        float[] directionList = new float[jetList.Length];
-
-        for (int x=0; x<jetList.Length; x++)
-        {
-            Vector3 targetDirection = jetList[x].transform.position - transform.position;
-            directionList[x] = targetDirection.magnitude;
-        }
-        for (int x = 0; x < directionList.Length; x++) print(directionList[x]); 
-
-        float closestDistance = Mathf.Min(directionList);
-        int index = Array.IndexOf(directionList, closestDistance);
-        if (index == -1)
-        {
-            return null;
-        }
-        return jetList[index];
     }
 
     private void Homing(ref float eulerAngleX, ref float eulerAngleY)
@@ -94,12 +78,9 @@ public class Missile : MonoBehaviour
         {
             if (hit.collider.CompareTag("jet"))
             {
-                //transform.LookAt(hit.collider.transform);
-
                 float targetAngleX = Vector3.SignedAngle(transform.forward, horizontalTargetDirection, Vector3.up); // left - right +
                 float targetAngleY = Vector3.SignedAngle(transform.forward, verticalTargetDirection, Vector3.right); // down - up +
                 float targetAngle = Vector3.SignedAngle(transform.forward, targetDirection, Vector3.forward);
-                //print($"targetAngleX:{targetAngleX}; targetAngleY:{targetAngleY}; targetAngle:{targetAngle}");
 
                 if (targetAngle <= missileSO.seekerFOV)
                 {
@@ -121,7 +102,6 @@ public class Missile : MonoBehaviour
                         eulerAngleY = Mathf.Min(-missileSO.maxTurnSpeed, targetAngleY * missileSO.turnSpeedMultiplier) * Time.fixedDeltaTime;
                     }
                 }
-                //print($"eulerAngleX:{eulerAngleX}; eulerAngleY:{eulerAngleY}");
             }
 
 
@@ -146,5 +126,14 @@ public class Missile : MonoBehaviour
         GameObject explosion = Instantiate(missileSO.explosionVFX, transform.position, transform.rotation);
         Destroy(explosion, 1);
         Destroy(gameObject);
+
+        if (other.CompareTag("jet"))
+        {
+            hitMissText.GetComponent<TMP_Text>().text = uiData.jetHit;
+        }
+        else
+        {
+            hitMissText.GetComponent<TMP_Text>().text = uiData.jetMiss;
+        }
     }
 }
