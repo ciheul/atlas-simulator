@@ -1,15 +1,18 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class Atlas : MonoBehaviour
 {
     public AtlasSO atlasSO;
+    public MissileSO missileSO;
     public UIData uiData;
     public MissileSpawner missile1;
     public MissileSpawner missile2;
     private MissileSpawner activeLauncher;
     public bool lockOn;
     public GameObject lockOnStatus;
+    public GameObject hitMissText;
 
     // zoom settings
     private int currentZoomLevel = 0;
@@ -28,7 +31,6 @@ public class Atlas : MonoBehaviour
     {
         HandleZoom();
         FiringControl();
-        print($"currentZoomLevel:{currentZoomLevel}");
     }
 
     private void FixedUpdate()
@@ -45,6 +47,7 @@ public class Atlas : MonoBehaviour
             missile2.deactivate();
             activeLauncher = missile1;
             deactivateLockOn();
+            hitMissText.GetComponent<TMP_Text>().text = null;
         }
 
         // missile 2
@@ -54,6 +57,7 @@ public class Atlas : MonoBehaviour
             missile2.activate();
             activeLauncher = missile2;
             deactivateLockOn();
+            hitMissText.GetComponent<TMP_Text>().text = null;
         }
 
         if(activeLauncher != null)
@@ -85,10 +89,47 @@ public class Atlas : MonoBehaviour
         {
             return;
         }
-        lockOn = true;
-        lockOnStatus.GetComponent<TMP_Text>().text = uiData.onText;
 
-        activeLauncher.StartArgonCountdown();
+        GameObject[] jetList = GameObject.FindGameObjectsWithTag("jet");
+        List<GameObject> targetJetList = new List<GameObject>();
+        List<float> targetAngleList = new List<float>();
+
+        for (int x=0; x<jetList.Length; x++)
+        {
+            Vector3 targetDirection = jetList[x].transform.position - transform.position;
+            RaycastHit hit;
+
+            Debug.DrawRay(transform.position, targetDirection, Color.red, 0.01f); // testing
+
+            if (Physics.Raycast(transform.position, targetDirection, out hit, 5000f))
+            {
+                if (hit.collider.CompareTag("jet"))
+                {
+                    float targetAngle = Vector3.SignedAngle(transform.forward, targetDirection, Vector3.forward);
+
+                    if (targetAngle <= missileSO.seekerFOV)
+                    {
+                        targetJetList.Add(jetList[x]);
+                        targetAngleList.Add(targetAngle);
+                    }
+                }
+            }
+        }
+
+        int closestToCrosshairIndex = -1;
+        if (targetJetList.Count > 0)
+        {
+            float closestToCrosshair = Mathf.Min(targetAngleList.ToArray());
+            closestToCrosshairIndex = targetAngleList.IndexOf(closestToCrosshair);
+            atlasSO.lockedOnJet = jetList[closestToCrosshairIndex];
+
+            lockOn = true;
+            lockOnStatus.GetComponent<TMP_Text>().text = uiData.onText;
+
+            activeLauncher.StartArgonCountdown();
+        }
+
+        print($"jetList count:{jetList.Length}; targetJetList count:{targetJetList.Count}; closestToCrosshairIndex:{closestToCrosshairIndex}");
     }
 
     void deactivateLockOn()
