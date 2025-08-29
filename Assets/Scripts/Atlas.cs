@@ -62,6 +62,7 @@ public class Atlas : MonoBehaviour
             activeLauncher = missile1;
             deactivateLockOn();
             hitMissText.GetComponent<TMP_Text>().text = null;
+            atlasSO.lockedOnJet = null;
         }
 
         // missile 2
@@ -72,6 +73,7 @@ public class Atlas : MonoBehaviour
             activeLauncher = missile2;
             deactivateLockOn();
             hitMissText.GetComponent<TMP_Text>().text = null;
+            atlasSO.lockedOnJet = null;
         }
 
         if(activeLauncher != null)

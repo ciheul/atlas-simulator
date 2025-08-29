@@ -88,6 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c8b965db5c3b743bafb8473d313390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentJet: {fileID: 7027150437423852862}
+  missileSO: {fileID: 11400000, guid: 07384de0f41ed374ebf180f45d2f1863, type: 2}
+  atlasSO: {fileID: 11400000, guid: 5b75fe798ae9b3345a83953ad348ff4d, type: 2}
 --- !u!1 &2221762285769918128
 GameObject:
   m_ObjectHideFlags: 0
