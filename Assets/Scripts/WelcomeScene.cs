@@ -46,7 +46,7 @@ public class WelcomeScene : MonoBehaviour
 
     public void Quit()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
         Debug.Log("Player has quit the game");
     }
