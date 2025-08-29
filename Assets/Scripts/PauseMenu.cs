@@ -13,7 +13,21 @@ public class PauseMenu : MonoBehaviour
 
     private void Awake()
     {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        GameObject audioObject = GameObject.FindGameObjectWithTag("Audio");
+
+        if (audioObject != null)
+        {
+            audioManager = audioObject.GetComponent<AudioManager>();
+            if (audioManager == null)
+            {
+                Debug.LogWarning("AudioManager component not found on tagged object.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("GameObject with tag 'Audio' not found.");
+        }
+
     }
 
     // Update is called once per frame
@@ -56,6 +70,9 @@ public class PauseMenu : MonoBehaviour
     public void BackToMenu()
     {
         SceneManager.LoadScene("WelcomeScene");
+
+        // ketika balik ke welcome scene kadang timeScale masih 0
+        Time.timeScale = 1;
     }
 
     public void ClickButton()

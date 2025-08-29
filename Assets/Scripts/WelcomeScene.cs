@@ -7,7 +7,20 @@ public class WelcomeScene : MonoBehaviour
 
     private void Awake()
     {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        GameObject audioObject = GameObject.FindGameObjectWithTag("Audio");
+
+        if (audioObject != null)
+        {
+            audioManager = audioObject.GetComponent<AudioManager>();
+            if (audioManager == null)
+            {
+                Debug.LogWarning("AudioManager component not found on tagged object.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("GameObject with tag 'Audio' not found.");
+        }
     }
     public void LoadEasyScene()
     {

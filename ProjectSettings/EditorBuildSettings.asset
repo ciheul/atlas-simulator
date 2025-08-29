@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/HardScene.unity
     guid: 1519a60d690c01e499e63a5f74084092
+  - enabled: 1
+    path: Assets/Scenes/PauseScene.unity
+    guid: d155dc2c31d7f8340b078da934d6ca3d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
