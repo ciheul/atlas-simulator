@@ -7,6 +7,8 @@ public class MissileSO : ScriptableObject
     public float seekerFOV = 20f;
     public float turnSpeedMultiplier = 3f;
     public float maxTurnSpeed = 2f;
+    public float maxDistance = 5000f;
+    public float seekerMaxDistance = 1000f;
     public GameObject explosionVFX;
     public GameObject smokeSFX;
 }

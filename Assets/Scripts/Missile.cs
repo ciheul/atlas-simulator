@@ -52,7 +52,7 @@ public class Missile : MonoBehaviour
         FormwardMovement(eulerAngleY, eulerAngleX);
 
         // flight distance limit
-        if ((now - timer) * missileSO.speed >= 5000)
+        if ((now - timer) * missileSO.speed >= missileSO.maxDistance)
         {
             Destroy(gameObject);
             hitMissText.GetComponent<TMP_Text>().text = uiData.jetMiss;
@@ -74,7 +74,7 @@ public class Missile : MonoBehaviour
         Debug.DrawRay(transform.position, horizontalTargetDirection, Color.blue, 0.01f); // testing
         Debug.DrawRay(transform.position, verticalTargetDirectionRay, Color.green, 0.01f); // testing
 
-        if (Physics.Raycast(transform.position, targetDirection, out hit, 300f))
+        if (Physics.Raycast(transform.position, targetDirection, out hit, missileSO.seekerMaxDistance))
         {
             if (hit.collider.CompareTag("jet"))
             {

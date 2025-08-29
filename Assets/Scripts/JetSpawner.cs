@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 
 public class JetSpawner : MonoBehaviour
 {
@@ -30,10 +31,19 @@ public class JetSpawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        int[] usedSpawnerIndex = new int[jetSpawnerList.Length];
         for (int x=0; x<difficultyJetQuantity; x++)
         {
             // pilih spawner mana yang spawn jet
-            int chosenSpawnerIndex = Random.Range(0, jetSpawnerList.Length);
+            int chosenSpawnerIndex;
+            bool spawnerAlreadyUsed = false;
+            do
+            {
+                chosenSpawnerIndex = Random.Range(0, jetSpawnerList.Length);
+                spawnerAlreadyUsed = usedSpawnerIndex.Contains(chosenSpawnerIndex);
+            } while (spawnerAlreadyUsed);
+
+            usedSpawnerIndex[x] = chosenSpawnerIndex;
             Instantiate(jet, jetSpawnerList[chosenSpawnerIndex].transform.position, jetSpawnerList[chosenSpawnerIndex].transform.rotation);
         }
     }

@@ -115,7 +115,7 @@ public class Atlas : MonoBehaviour
 
             Debug.DrawRay(transform.position, targetDirection, Color.red, 0.01f); // testing
 
-            if (Physics.Raycast(transform.position, targetDirection, out hit, 5000f))
+            if (Physics.Raycast(transform.position, targetDirection, out hit, missileSO.maxDistance))
             {
                 if (hit.collider.CompareTag("jet"))
                 {
