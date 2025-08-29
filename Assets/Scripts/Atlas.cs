@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Atlas : MonoBehaviour
 {
@@ -31,6 +33,18 @@ public class Atlas : MonoBehaviour
     {
         HandleZoom();
         FiringControl();
+
+        //DEBUG
+        if (atlasSO.lockedOnJet != null)
+        {
+            if (!atlasSO.lockedOnJet.IsDestroyed())
+            {
+                Vector3 targetDirection = atlasSO.lockedOnJet.transform.position - transform.position;
+                RaycastHit hit;
+
+                Debug.DrawRay(transform.position, targetDirection, Color.red, 0.01f); // testing
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -110,7 +124,7 @@ public class Atlas : MonoBehaviour
                     if (targetAngle <= missileSO.seekerFOV)
                     {
                         targetJetList.Add(jetList[x]);
-                        targetAngleList.Add(targetAngle);
+                        targetAngleList.Add(Mathf.Abs(targetAngle));
                     }
                 }
             }
@@ -128,8 +142,6 @@ public class Atlas : MonoBehaviour
 
             activeLauncher.StartArgonCountdown();
         }
-
-        print($"jetList count:{jetList.Length}; targetJetList count:{targetJetList.Count}; closestToCrosshairIndex:{closestToCrosshairIndex}");
     }
 
     void deactivateLockOn()
